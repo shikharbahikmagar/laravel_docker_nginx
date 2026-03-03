@@ -123,6 +123,18 @@ can access phpmyadmin: with localhost:8080
 docker compose down -v  
 docker compose up -d --build
 
+### Fix PHP tempnam() Warning in Docker Laravel
+
+# Enter app container
+docker exec -it laravel_app bash
+
+# Set writable permissions
+chmod -R 775 storage bootstrap/cache
+chown -R www-data:www-data storage bootstrap/cache
+
+# Optional: hide warnings in .env
+# APP_DEBUG=false
+
 ------------------------------------------------------------
 
 ## 📁 Project Structure
