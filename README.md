@@ -1,59 +1,136 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚀 Laravel + Docker + Nginx + MySQL
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project provides a complete Laravel development environment using Docker, Nginx, and MySQL.
 
-## About Laravel
+Application URL: http://localhost:8000
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+------------------------------------------------------------
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📦 Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Laravel
+- Docker
+- Docker Compose
+- Nginx
+- MySQL 8.0
 
-## Learning Laravel
+------------------------------------------------------------
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 🐳 Docker Services
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **app** (`laravel_app`)
+   - Built from Dockerfile
+   - Working directory: /var/www
+   - Project mounted as volume
 
-## Laravel Sponsors
+2. **nginx** (`laravel_nginx`)
+   - Image: nginx:latest
+   - Port mapping: 8000 -> 80
+   - Config loaded from docker/nginx
+   - Depends on: laravel_app
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. **mysql** (`laravel_mysql`)
+   - Image: mysql:8.0
+   - Port: 3306
+   - Credentials:
+     - DB_DATABASE=laravel
+     - DB_USERNAME=laravel
+     - DB_PASSWORD=secret
+     - MYSQL_ROOT_PASSWORD=secret
 
-### Premium Partners
+------------------------------------------------------------
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 🛠 Requirements
 
-## Contributing
+Make sure Docker and Docker Compose are installed:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+docker --version  
+docker compose version
 
-## Code of Conduct
+------------------------------------------------------------
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🚀 Setup Instructions
 
-## Security Vulnerabilities
+1. Clone the repository
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+git clone git@github.com:shikharbahikmagar/laravel_docker_nginx.git  
+cd laravel_docker_nginx
 
-## License
+2. Copy environment file
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+cp .env.example .env
+
+3. Update `.env` database configuration:
+
+DB_CONNECTION=mysql  
+DB_HOST=mysql  
+DB_PORT=3306  
+DB_DATABASE=laravel  
+DB_USERNAME=laravel  
+DB_PASSWORD=secret
+
+4. Build and start containers
+
+docker compose up -d --build
+
+5. Install Composer dependencies
+
+docker compose exec laravel_app composer install
+
+6. Generate application key
+
+docker compose exec laravel_app php artisan key:generate
+
+7. Run database migrations
+
+docker compose exec laravel_app php artisan migrate
+
+------------------------------------------------------------
+
+## 🌐 Access Application
+
+Open in browser: http://localhost:8000
+
+------------------------------------------------------------
+
+## 🛠 Useful Commands
+
+Start containers:  
+docker compose up -d
+
+Stop containers:  
+docker compose down
+
+Rebuild containers:  
+docker compose down  
+docker compose up -d --build
+
+Access app container shell:  
+docker compose exec laravel_app bash
+
+Run artisan command:  
+docker compose exec laravel_app php artisan <command>
+
+View logs:  
+docker compose logs -f
+
+------------------------------------------------------------
+
+## ⚠ Reset Everything (Deletes Database Data)
+
+docker compose down -v  
+docker compose up -d --build
+
+------------------------------------------------------------
+
+## 📁 Project Structure
+
+docker-compose.yml  
+Dockerfile  
+docker/nginx configuration  
+Laravel project files
+
+------------------------------------------------------------
+
+Author: Shikhar Magar  
+Laravel Developer
