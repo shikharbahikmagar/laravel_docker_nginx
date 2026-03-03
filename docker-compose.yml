@@ -30,13 +30,33 @@ services:
     container_name: laravel_mysql
     environment:
       MYSQL_ROOT_PASSWORD: secret
-      MYSQL_DATABASE: laravel
-      MYSQL_USER: laravel
-      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: laravel_nginx_docker
+      MYSQL_USER: laraveluser
+      MYSQL_PASSWORD: secretuser
     ports:
       - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql   # <-- Persistent storage
+    networks:
+      - laravel
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: laravel_pma
+    environment:
+      PMA_HOST: mysql        # must match your MySQL service name
+      PMA_PORT: 3306
+      PMA_USER: laraveluser
+      PMA_PASSWORD: secretuser
+    ports:
+      - "8080:80"            # access phpMyAdmin at http://localhost:8080
+    depends_on:
+      - mysql
     networks:
       - laravel
 
 networks:
   laravel:
+
+volumes:
+  mysql-data:   # <-- Named Docker volume for persistence
