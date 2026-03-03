@@ -114,6 +114,8 @@ docker compose exec laravel_app php artisan <command>
 View logs:  
 docker compose logs -f
 
+can access phpmyadmin: with localhost:8080
+
 ------------------------------------------------------------
 
 ## ⚠ Reset Everything (Deletes Database Data)
